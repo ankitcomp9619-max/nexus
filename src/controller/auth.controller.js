@@ -14,25 +14,31 @@ const createRefreshToken = () => {
   return crypto.randomBytes(48).toString("hex");
 };
 
+
 const setAuthCookies = (res, accessToken, refreshToken) => {
   const isProduction = process.env.NODE_ENV === "production";
 
-  res.cookie("accessToken", accessToken, {
+  const commonOptions = {
     httpOnly: true,
     secure: isProduction,
-    sameSite: "lax",
+    sameSite: isProduction ? "none" : "lax"
+  };
+
+  // Access token
+  res.cookie("accessToken", accessToken, {
+    ...commonOptions,
     maxAge: 15 * 60 * 1000,
     path: "/"
   });
 
+  // Refresh token
   res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: "lax",
+    ...commonOptions,
     maxAge: 7 * 24 * 60 * 60 * 1000,
     path: "/api/auth"
   });
 };
+
 
 // REGISTER
 export const register = async (req, res, next) => {
@@ -135,9 +141,9 @@ export const login = async (req, res, next) => {
 
 //Logout
 
+
 export const logout = async (req, res, next) => {
-  
-    try {
+  try {
     const refreshToken = req.cookies?.refreshToken;
 
     if (refreshToken) {
@@ -151,17 +157,21 @@ export const logout = async (req, res, next) => {
       );
     }
 
-    res.clearCookie("accessToken", {
+    const isProduction = process.env.NODE_ENV === "production";
+
+    const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax"
+    };
+
+    res.clearCookie("accessToken", {
+      ...cookieOptions,
       path: "/"
     });
 
     res.clearCookie("refreshToken", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      ...cookieOptions,
       path: "/api/auth"
     });
 
@@ -175,10 +185,11 @@ export const logout = async (req, res, next) => {
   }
 };
 
+
 //refresh token 
 export const refresh = async (req, res, next) => {
   try {
-    const oldToken = req.cookies.refreshToken;
+    const oldToken = req.cookies?.refreshToken;
 
     if (!oldToken) {
       return res.status(401).json({

@@ -1,12 +1,14 @@
 $kind: http-request
 name: New Request
-url: http://localhost:5000/api/auth/login
+url: https://nexus-backend-t6mi.onrender.com/api/auth/login
 method: POST
 body:
   type: json
   content: "{\r
 
-    \  \"email\": \"rahul@gmail.com\",\r
+    \  \r
+
+    \  \"email\": \"ankit@gmail.com\",\r
 
     \  \"password\": \"Rahul@123456\"\r
 

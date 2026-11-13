@@ -1,5 +1,5 @@
 $kind: http-request
-url: http://localhost:5000/api/auth/register
+url: https://nexus-backend-t6mi.onrender.com/api/auth/register
 method: POST
 body:
   type: json
@@ -7,7 +7,7 @@ body:
 
     \  \"username\": \"ankit Sharma\",\r
 
-    \  \"email\": \"ankits@gmail.com\",\r
+    \  \"email\": \"ankit@gmail.com\",\r
 
     \  \"password\": \"Rahul@123456\"\r
 
