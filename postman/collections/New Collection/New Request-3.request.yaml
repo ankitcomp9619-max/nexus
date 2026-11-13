@@ -1,0 +1,15 @@
+$kind: http-request
+name: New Request
+url: http://localhost:5000/api/tasks/
+method: POST
+body:
+  type: json
+  content: |-
+    {
+      "title": "ashish Authentication API",
+      "description": "Implement JWT authentication and refresh tokens",
+      "priority": "low",
+      "deadline": "2026-11-15T18:00:00.000Z",
+      "estimatedDuration": "4"
+    }
+order: 4000
